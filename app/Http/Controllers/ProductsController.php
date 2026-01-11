@@ -6,10 +6,13 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 
 class ProductsController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index(): JsonResponse
     {
         $products = new ProductCollection(Product::paginate());
@@ -32,15 +35,21 @@ class ProductsController extends Controller
         return response()->json($product, 200);
     }
 
-    public function store(ProductRequest $request): JsonResponse
+    public function create(ProductRequest $request): JsonResponse
     {
+        if ($this->authorize('create', Product::class == false)) {
+            return response()->json([
+                'message' => 'not authorized',
+            ]);
+        }
+
         $validated = $request->validated();
 
         if (! isset($validated['stock'])) {
             $validated['stock'] = 0;
         }
 
-        $product = Product::create($validated);
+        $product = $request->user()->products()->create($validated);
 
         return response()->json($product, 201);
     }
