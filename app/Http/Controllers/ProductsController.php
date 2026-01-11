@@ -8,7 +8,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 
-class ProductController extends Controller
+class ProductsController extends Controller
 {
     public function index(): JsonResponse
     {
