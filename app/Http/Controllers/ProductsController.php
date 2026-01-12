@@ -15,6 +15,8 @@ class ProductsController extends Controller
 
     public function index(): JsonResponse
     {
+        $this->authorize('viewAny', Product::class);
+
         $products = new ProductCollection(Product::paginate());
 
         return response()->json($products, 200);
@@ -22,6 +24,8 @@ class ProductsController extends Controller
 
     public function show(int $id): JsonResponse
     {
+        $this->authorize('viewAny', Product::class);
+
         $product = Product::find($id);
 
         if (! $product) {
@@ -37,11 +41,7 @@ class ProductsController extends Controller
 
     public function create(ProductRequest $request): JsonResponse
     {
-        if ($this->authorize('create', Product::class == false)) {
-            return response()->json([
-                'message' => 'not authorized',
-            ]);
-        }
+        $this->authorize('create', Product::class);
 
         $validated = $request->validated();
 
@@ -65,6 +65,8 @@ class ProductsController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
+        $this->authorize('destroy', Product::class);
+
         $product = Product::find($id);
 
         if (! $product) {

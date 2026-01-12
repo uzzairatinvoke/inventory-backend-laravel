@@ -27,9 +27,7 @@ class LoginController extends Controller
                     'message' => 'Credentials incorrect. Please try again.',
                 ]);
             }
-
             $token = $user->createToken('token', ['*'], Carbon::now()->addDay())->plainTextToken;
-
             return response()->json([
                 'token' => $token,
             ]);
