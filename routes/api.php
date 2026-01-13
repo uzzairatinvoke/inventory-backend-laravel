@@ -5,6 +5,8 @@ use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
+
+    // http://localhost:8000/api/v1/login
     Route::post('login', [LoginController::class, 'login']);
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
@@ -18,3 +20,4 @@ Route::prefix('v1')->group(function () {
         Route::delete('products/{id}', [ProductsController::class, 'destroy']);
     });
 });
+

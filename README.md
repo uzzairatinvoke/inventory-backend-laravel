@@ -1,58 +1,308 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Document App Backend (Laravel)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel 12 REST API backend application for managing products with authentication using Laravel Sanctum.
 
-## About Laravel
+## Prerequisites
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Before you begin, ensure you have the following installed on your system:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **PHP** >= 8.2
+- **Composer** (PHP dependency manager)
+- **Node.js** >= 18.x and **npm** (for frontend assets)
+- **SQLite** (default database) or **MySQL/PostgreSQL** (optional)
+- **Git**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Checking Your Environment
 
-## Learning Laravel
+```bash
+# Check PHP version
+php -v
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+# Check Composer
+composer --version
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Check Node.js and npm
+node -v
+npm -v
+```
 
-## Laravel Sponsors
+## Installation Steps
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clone the Repository
 
-### Premium Partners
+```bash
+git clone git@github.com:uzzairatinvoke/inventory-backend-laravel.git
+cd inventory-backend-laravel
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. Install PHP Dependencies
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Environment Configuration
 
-## Code of Conduct
+Copy the environment example file and create your `.env` file:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+cp .env.example .env
+```
 
-## Security Vulnerabilities
+If `.env.example` doesn't exist, create a `.env` file manually with the following content:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```env
+APP_NAME=Inventory
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_TIMEZONE=UTC
+APP_URL=http://localhost:8000
+
+LOG_CHANNEL=stack
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=debug
+
+DB_CONNECTION=sqlite
+DB_DATABASE=/absolute/path/to/database/database.sqlite
+
+# If using Postgresql instead of SQLite:
+# DB_CONNECTION=pgsql
+# DB_HOST=127.0.0.1
+# DB_PORT=5432
+# DB_DATABASE=your_database_name
+# DB_USERNAME=your_database_user
+# DB_PASSWORD=your_database_password
+
+SESSION_DRIVER=database
+SESSION_LIFETIME=120
+
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+
+CACHE_STORE=database
+CACHE_PREFIX=
+
+SANCTUM_STATEFUL_DOMAINS=localhost:8000
+SESSION_DOMAIN=localhost
+```
+
+### 4. Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+### 5. Database Setup
+
+#### Option A: Using SQLite (Default)
+
+Create the SQLite database file:
+
+```bash
+touch database/database.sqlite
+```
+
+Or ensure the path in your `.env` file points to the correct location:
+
+```env
+DB_DATABASE=/absolute/path/to/inventory-backend-laravel/database/database.sqlite
+```
+
+#### Option B: Using MySQL/PostgreSQL
+
+1. Create a database in your MySQL/PostgreSQL server
+2. Update your `.env` file with the database credentials:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=your_database_user
+DB_PASSWORD=your_database_password
+```
+
+### 6. Run Database Migrations
+
+```bash
+php artisan migrate
+```
+
+### 7. Seed the Database (Optional)
+
+If you have seeders, run:
+
+```bash
+php artisan db:seed
+```
+
+### 8. Install Frontend Dependencies
+
+```bash
+npm install
+```
+
+### 9. Build Frontend Assets
+
+```bash
+npm run build
+```
+
+## Running the Application
+
+### Development Mode
+
+You can run the development server using the convenience script:
+
+```bash
+composer run dev
+```
+
+This will start:
+- Laravel development server (http://localhost:8000)
+- Queue worker
+- Log viewer (Pail)
+- Vite dev server
+
+Alternatively, run them separately:
+
+```bash
+# Terminal 1: Start Laravel server
+php artisan serve
+
+# Terminal 2: Start Vite dev server (if needed)
+npm run dev
+```
+
+### Production Mode
+
+```bash
+# Build assets
+npm run build
+
+# Start server
+php artisan serve
+```
+
+## API Endpoints
+
+The API is available at: `http://localhost:8000/api/v1/`
+
+### Authentication Endpoints
+
+- `POST /api/v1/login` - Login and get authentication token
+  - Body: `{ "email": "user@example.com", "password": "password" }`
+  
+- `POST /api/v1/logout` - Logout (requires authentication)
+  - Headers: `Authorization: Bearer {token}`
+
+### Product Endpoints (All require authentication)
+
+- `GET /api/v1/products` - List all products
+- `GET /api/v1/products/{id}` - Get a specific product
+- `POST /api/v1/products` - Create a new product
+- `PATCH /api/v1/products/{id}` - Update a product
+- `DELETE /api/v1/products/{id}` - Delete a product
+
+All authenticated endpoints require the following header:
+```
+Authorization: Bearer {your_token_here}
+```
+
+## Testing
+
+Run the test suite:
+
+```bash
+composer run test
+# or
+php artisan test
+```
+
+## Code Quality
+
+Laravel Pint is included for code formatting:
+
+```bash
+./vendor/bin/pint
+```
+
+## Troubleshooting
+
+### Permission Issues
+
+If you encounter permission issues with storage or cache:
+
+```bash
+php artisan storage:link
+chmod -R 775 storage bootstrap/cache
+```
+
+### Clear Cache
+
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
+```
+
+### Database Issues
+
+If you need to reset your database:
+
+```bash
+php artisan migrate:fresh
+# or with seeders
+php artisan migrate:fresh --seed
+```
+
+### Port Already in Use
+
+If port 8000 is already in use, specify a different port:
+
+```bash
+php artisan serve --port=8001
+```
+
+Remember to update the frontend API URL accordingly.
+
+## Project Structure
+
+```
+inventory-backend-laravel/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/    # API controllers
+│   │   ├── Requests/       # Form request validation
+│   │   └── Resources/      # API resources
+│   ├── Models/             # Eloquent models
+│   ├── Policies/           # Authorization policies
+│   └── Providers/          # Service providers
+├── config/                 # Configuration files
+├── database/
+│   ├── migrations/         # Database migrations
+│   └── seeders/           # Database seeders
+├── routes/
+│   └── api.php            # API routes
+├── storage/               # File storage
+└── tests/                 # Test files
+```
+
+## Key Dependencies
+
+- **Laravel Framework** ^12.0
+- **Laravel Sanctum** ^4.0 - API authentication
+- **Spatie Laravel Permission** ^6.24 - Role and permission management
+- **Pest** ^3.8 - Testing framework
+
+## Additional Resources
+
+- [Laravel Documentation](https://laravel.com/docs)
+- [Laravel Sanctum Documentation](https://laravel.com/docs/sanctum)
+- [Spatie Laravel Permission Documentation](https://spatie.be/docs/laravel-permission)
 
 ## License
 
