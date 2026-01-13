@@ -1,4 +1,4 @@
-# Document App Backend (Laravel)
+# Inventory System Backend (Laravel)
 
 A Laravel 12 REST API backend application for managing products with authentication using Laravel Sanctum.
 
