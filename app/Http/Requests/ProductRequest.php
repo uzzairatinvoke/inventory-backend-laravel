@@ -20,6 +20,13 @@ class ProductRequest extends FormRequest
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'integer|min:0',
+            
+            'photo' => 'sometimes|file|mimetypes:image/png,image/jpeg,image/webp,max:10240',
+            // photos column
+            'file_path' => 'string',
+            'original_filename' => 'string',
+            'file_size' => 'string',
+            'mime_type' => 'string',
         ];
 
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
@@ -40,7 +47,7 @@ class ProductRequest extends FormRequest
             'price.numeric' => 'Price should be in numbers',
             'price.min' => 'Price should have at least 0',
             'stock.integer' => 'Please enter stock count for this product',
-            'stock'
+            'stock',
         ];
     }
 

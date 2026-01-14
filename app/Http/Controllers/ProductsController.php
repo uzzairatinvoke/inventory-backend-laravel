@@ -8,6 +8,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 
 class ProductsController extends Controller
 {
@@ -51,6 +52,25 @@ class ProductsController extends Controller
 
         $product = $request->user()->products()->create($validated);
 
+        if ($request->exists('photo') && $validated['photo']) {
+            $original_filename = $request->file('photo')->getClientOriginalName();
+            $newFilename = Str::uuid().'.'.$request->file('photo')->getClientOriginalExtension();
+            $mime_type = $request->file('photo')->getMimeType();
+            $file_size = $request->file('photo')->getSize();
+
+            $path = "products/$product->id";
+
+            $file_path = $request->file('photo')->storeAs($path, $newFilename, 'r2');
+
+            $product->update([
+                'file_path' => $file_path,
+                'file_size' => $file_size,
+                'mime_type' => $mime_type,
+                'storage_disk' => 'r2',
+                'original_filename' => $original_filename,
+            ]);
+        }
+
         return response()->json($product, 201);
     }
 
@@ -81,4 +101,6 @@ class ProductsController extends Controller
             'message' => 'Product deleted successfully',
         ], 204);
     }
+
+    public function setProductPhoto($request) {}
 }
