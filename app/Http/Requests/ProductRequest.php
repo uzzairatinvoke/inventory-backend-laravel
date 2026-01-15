@@ -20,6 +20,8 @@ class ProductRequest extends FormRequest
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'integer|min:0',
+            // nama input untuk file upload di frontend
+            'photo' => 'sometimes|required|file|mimetypes:image/png,image/jpeg,image/webp|max:10240',
         ];
 
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
@@ -40,7 +42,7 @@ class ProductRequest extends FormRequest
             'price.numeric' => 'Price should be in numbers',
             'price.min' => 'Price should have at least 0',
             'stock.integer' => 'Please enter stock count for this product',
-            'stock'
+            'stock',
         ];
     }
 

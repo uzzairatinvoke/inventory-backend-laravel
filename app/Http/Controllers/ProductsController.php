@@ -8,6 +8,8 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ProductsController extends Controller
 {
@@ -42,15 +44,39 @@ class ProductsController extends Controller
     public function create(ProductRequest $request): JsonResponse
     {
         $this->authorize('create', Product::class);
-
+       
         $validated = $request->validated();
 
         if (! isset($validated['stock'])) {
             $validated['stock'] = 0;
         }
-
+        // create product
         $product = $request->user()->products()->create($validated);
 
+        // upload photo, photo is optional hence we need to do this conditional
+        if($request->exists('photo') && $validated['photo']){
+            
+            $file = $request->file('photo');
+            $original_filename = $file->getClientOriginalName();
+            $file_size = $file->getSize();
+            $mime_type = $file->getMimeType();
+            $storage_disk = 'r2';
+            $newFileName = Str::uuid().".".$file->getClientOriginalExtension();
+
+            // ini ialah code untuk upload file
+            $file_path = $file->storeAs('products/'.Auth::id(),$newFileName,'r2');
+
+            // simpan metadata by updating the database
+            $product->update([
+                'file_path' => $file_path,
+                'original_filename' => $original_filename,
+                'file_size' => $file_size,
+                'mime_type' => $mime_type,
+                'storage_disk' => $storage_disk
+            ]);
+
+        }
+    
         return response()->json($product, 201);
     }
 
