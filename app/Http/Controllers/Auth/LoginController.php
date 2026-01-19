@@ -28,8 +28,19 @@ class LoginController extends Controller
                 ]);
             }
             $token = $user->createToken('token', ['*'], Carbon::now()->addDay())->plainTextToken;
+            
+            // Load user roles and permissions
+            $user->load('roles', 'permissions');
+            
             return response()->json([
                 'token' => $token,
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'roles' => $user->roles->pluck('name')->toArray(),
+                    'permissions' => $user->getAllPermissions()->pluck('name')->toArray(),
+                ],
             ]);
         }
 
