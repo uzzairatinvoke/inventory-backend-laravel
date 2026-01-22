@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['frontend.abc.com','localhost:3000'],
+    'allowed_origins' => ['http://localhost:5173','https://frontend.system.com'],
 
     'allowed_origins_patterns' => [],
 

@@ -15,6 +15,14 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'price' => (string) number_format($this->price, 2),
             'stock' => $this->stock,
+            'category' => $this->whenLoaded('category', function () {
+                return [
+                    'id' => $this->category->id,
+                    'name' => $this->category->name,
+                    'description' => $this->category->description,
+                ];
+            }),
+            'category_id' => $this->category_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

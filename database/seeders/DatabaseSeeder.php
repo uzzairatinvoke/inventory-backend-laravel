@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
 
         $permissions = [
             'products-view', 'products-create', 'products-update', 'products-delete',
+            'category-view','category-create','category-update','category-delete'
         ];
 
         foreach ($permissions as $permission) {
@@ -40,10 +41,10 @@ class DatabaseSeeder extends Seeder
                     $employee->givePermissionTo($permissions);
                     break;
                 case 'staff':
-                    $employee->givePermissionTo(['products-view', 'products-create', 'products-update']);
+                    $employee->givePermissionTo(['products-view', 'products-create', 'products-update', 'category-view','category-create','category-update']);
                     break;
                 case 'viewer':
-                    $employee->givePermissionTo(['products-view']);
+                    $employee->givePermissionTo(['products-view','category-view']);
                     break;
                 default:
             }
@@ -75,5 +76,16 @@ class DatabaseSeeder extends Seeder
                 default:
             }
         });
+
+        // category has many products
+        // Seed categories
+        $this->call([
+            CategorySeeder::class,
+        ]);
+
+        // Seed products (depends on categories and users)
+        $this->call([
+            ProductSeeder::class,
+        ]);
     }
 }

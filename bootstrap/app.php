@@ -21,7 +21,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $e) {
             return response()->json([
                 'message' => 'not authorized',
-            ]);
-            
+            ]); 
         });
     })->create();

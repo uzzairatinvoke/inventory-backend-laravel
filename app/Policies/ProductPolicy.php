@@ -45,6 +45,11 @@ class ProductPolicy
     public function destroy(User $user, Product $product): bool
     {
         return $user->hasPermissionTo('products-delete');
+        // if($user->name == "Ahmad"){
+        //     return true;
+        // }
+
+        // return false;
     }
 
     /**
@@ -60,6 +65,10 @@ class ProductPolicy
      */
     public function forceDelete(User $user, Product $product): bool
     {
+        return false;
+    }
+
+    public function upload(){
         return false;
     }
 }

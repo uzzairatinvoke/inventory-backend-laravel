@@ -20,6 +20,7 @@ class ProductRequest extends FormRequest
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'integer|min:0',
+            'category_id' => 'required|exists:categories,id',
             // nama input untuk file upload di frontend
             'photo' => 'sometimes|required|file|mimetypes:image/png,image/jpeg,image/webp|max:10240',
         ];
@@ -41,6 +42,8 @@ class ProductRequest extends FormRequest
             'price.required' => 'Please enter the price for the product',
             'price.numeric' => 'Price should be in numbers',
             'price.min' => 'Price should have at least 0',
+            'category_id.required' => 'Please select a category for the product',
+            'category_id.exists' => 'The selected category does not exist',
             'stock.integer' => 'Please enter stock count for this product',
             'stock',
         ];
